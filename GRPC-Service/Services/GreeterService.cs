@@ -15,7 +15,7 @@ namespace GRPC_Service.Services
         {
             return Task.FromResult(new HelloReply
             {
-                Message = "Hello " + request.Name
+                Message = "Hola tontoshi, el proyecto se llama: " + request.Name
             });
         }
     }
