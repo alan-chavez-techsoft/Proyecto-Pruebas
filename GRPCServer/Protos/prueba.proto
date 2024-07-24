@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "GRPCServer";
+
+package prueba;
+
+service PruebaGRPC {
+	rpc GetPrueba(PruebaRequest) returns (PruebaResponse);
+}
+
+message PruebaRequest {
+	string name = 1;
+}
+
+message PruebaResponse {
+	string message = 1;
+}
