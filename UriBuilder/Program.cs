@@ -1,5 +1,4 @@
 ﻿string url = "http://archivingtst.bisoft.com.mx:8028/application";
-//string url = "http://archivingtst.bisoft.com.mx:8028";
 var uri = new UriBuilder(url);
 Console.WriteLine($"Esquema: {uri.Scheme}");
 Console.WriteLine($"Dominio: {uri.Host}");
