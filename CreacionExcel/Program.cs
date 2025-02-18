@@ -13,29 +13,38 @@ namespace CreacionExcel
         static List<PolicyBody> ObtenerLista()
         {
             var lista = new List<PolicyBody>();
-            for (int i = 0; i < 10; i++)
+            for(int i = 0; i < 10; i++)
             {
                 lista.Add(new PolicyBody
                 {
                     FechaDocumento = DateTime.Now,
-                    IdSociedad = "IdSociedad",
-                    ClaseDocumento = "ClaseDocumento",
+                    IdSociedad = "SOC" + i,
+                    ClaseDocumento = "CL" + i,
                     FechaContable = DateTime.Now,
                     Periodo = DateTime.Now,
-                    ReferenciaCabecero = 1,
-                    TextoCabecero = "TextoCabecero",
-                    LlaveSistema = 123456789,
-                    PrimerNumeroReferencia = 123456789,
-                    NumeroPosicion = 1,
-                    ClaveContable = 1,
-                    NumeroCuenta = 1,
-                    Importe = 1,
-                    CentroCostosId = "CentroCostosId",
-                    AsignacionId = "AsignacionId",
-                    Texto = "Texto",
-                    IndicadorIva = "asdfghjklñ",
-                    ImporteImpuesto = 1,
-                    DivisionId = "DivisionId"
+                    ReferenciaCabecero = i,
+                    TextoCabecero = "Texto Cabecero " + i,
+                    LlaveSistema = i,
+                    PrimerNumeroReferencia = i,
+                    NumeroPosicion = i,
+                    ClaveContable = i,
+                    NumeroCuenta = i,
+                    ImporteDetalle = 100.50m + i,
+                    CentroCostosId = "CC" + i,
+                    AsignacionId = "AS" + i,
+                    Texto = "Texto " + i,
+                    IndicadorIva = "IVA" + i,
+                    ImporteImpuesto = 10.50m + i,
+                    DivisionId = "DIV" + i,
+                    TipoPoliza = "TP" + i,
+                    ImporteCabecero = 200.75m + i,
+                    ConceptoCabecero = "Concepto Cabecero " + i,
+                    ConceptoDetalle = "Concepto Detalle " + i,
+                    Renglon = i,
+                    CuentaContableId = i,
+                    Cargo = 50.25m + i,
+                    Abono = 25.75m + i,
+                    NombreCuentaContable = "Cuenta Contable " + i
                 });
             }
             return lista;
@@ -89,17 +98,17 @@ namespace CreacionExcel
             {
                 fila++;
                 #region Datos Primer Excel
-                //worksheet1.Cell($"A{fila}").Value = poliza.FolioPoliza;
-                //worksheet1.Cell($"B{fila}").Value = poliza.TipoCambio;
-                //worksheet1.Cell($"C{fila}").Value = poliza.FechaContable;
-                //worksheet1.Cell($"D{fila}").Value = poliza.Importe;
-                //worksheet1.Cell($"E{fila}").Value = poliza.Concepto;
-                //worksheet1.Cell($"F{fila}").Value = poliza.Renglon;
-                //worksheet1.Cell($"G{fila}").Value = poliza.CodigoCuentaContable;
-                //worksheet1.Cell($"H{fila}").Value = poliza.Concepto2;
-                //worksheet1.Cell($"I{fila}").Value = poliza.Cargo;
-                //worksheet1.Cell($"J{fila}").Value = poliza.Abono;
-                //worksheet1.Cell($"K{fila}").Value = poliza.NombreCuentaContable;
+                worksheet1.Cell($"A{fila}").Value = poliza.LlaveSistema;
+                worksheet1.Cell($"B{fila}").Value = poliza.TipoPoliza;
+                worksheet1.Cell($"C{fila}").Value = poliza.FechaContable;
+                worksheet1.Cell($"D{fila}").Value = poliza.ImporteCabecero;
+                worksheet1.Cell($"E{fila}").Value = poliza.ConceptoCabecero;
+                worksheet1.Cell($"F{fila}").Value = poliza.Renglon;
+                worksheet1.Cell($"G{fila}").Value = poliza.CuentaContableId;
+                worksheet1.Cell($"H{fila}").Value = poliza.ConceptoDetalle;
+                worksheet1.Cell($"I{fila}").Value = poliza.Cargo;
+                worksheet1.Cell($"J{fila}").Value = poliza.Abono;
+                worksheet1.Cell($"K{fila}").Value = poliza.NombreCuentaContable;
                 #endregion
 
                 #region Datos Segundo Excel
@@ -117,7 +126,7 @@ namespace CreacionExcel
                 worksheet2.Cell($"L{fila}").Value = poliza.NumeroPosicion;
                 worksheet2.Cell($"M{fila}").Value = poliza.ClaveContable;
                 worksheet2.Cell($"N{fila}").Value = poliza.NumeroCuenta;
-                worksheet2.Cell($"O{fila}").Value = poliza.Importe;
+                worksheet2.Cell($"O{fila}").Value = poliza.ImporteDetalle;
                 worksheet2.Cell($"P{fila}").Value = poliza.CentroCostosId;
                 worksheet2.Cell($"Q{fila}").Value = poliza.AsignacionId;
                 worksheet2.Cell($"R{fila}").Value = poliza.Texto;
