@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MAUI.Biblioteca", "MAUI.Bib
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MAUI.App2", "MAUI.App2\MAUI.App2.csproj", "{65CD5E3F-FC5C-4A31-BA8A-E0E91CF792AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PruebaEndpoint-InvElectronico", "PruebaEndpoint-InvElectronico\PruebaEndpoint-InvElectronico.csproj", "{A56DB174-DD90-48AF-A327-E324FD7CCFFA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{65CD5E3F-FC5C-4A31-BA8A-E0E91CF792AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65CD5E3F-FC5C-4A31-BA8A-E0E91CF792AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{65CD5E3F-FC5C-4A31-BA8A-E0E91CF792AF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A56DB174-DD90-48AF-A327-E324FD7CCFFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A56DB174-DD90-48AF-A327-E324FD7CCFFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A56DB174-DD90-48AF-A327-E324FD7CCFFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A56DB174-DD90-48AF-A327-E324FD7CCFFA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
