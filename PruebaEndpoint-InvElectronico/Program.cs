@@ -9,8 +9,10 @@ internal class Program
     private static Guid _acuseId;
     private static async Task Main(string[] args)
     {
-        //client.BaseAddress = new Uri("http://localhost:5083/");
-        _client.BaseAddress = new Uri("https://archivingtst.bisoft.com.mx:8080/pharmapickingPS/");
+        _client.BaseAddress = new Uri("http://localhost:5083/");
+        //_client.BaseAddress = new Uri("https://archivingtst.bisoft.com.mx:8080/pharmapickingPS/");
+        //_client.BaseAddress = new Uri("https://archivingtst.bisoft.com.mx:8080/pharmapickingR-PS/");
+
         await Login();
         await ConsultarAcuse();
 
@@ -41,14 +43,18 @@ internal class Program
     }
     private static async Task InactivarAcuse()
     {
-
+        var dto = new ConsultarInventarioElectronicoResponse
+        {
+            AcuseId = _acuseId
+        };
         var json = JsonConvert.SerializeObject(_acuseId);
         HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
         var responsePerron =
-        await _client.PutAsync($"api/inventarios-electronicos/{_acuseId}/inactivar", content);
+        //await _client.PutAsync($"api/inventarios-electronicos/{_acuseId}/inactivar", content);
+        await _client.PutAsync($"api/inventarios-electronicos/{_acuseId}", content);
+        //await _client.PutAsync($"api/inventarios-electronicos/{_acuseId}/inactivar", null);
 
-        //var responsePerron =
-        //    await _client.PutAsync($"api/inventarios-electronicos/{_acuseId}/inactivar", null);
+
 
         Console.WriteLine(responsePerron);
     }
