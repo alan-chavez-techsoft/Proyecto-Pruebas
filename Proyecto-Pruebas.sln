@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MAUI.App2", "MAUI.App2\MAUI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PruebaEndpoint-InvElectronico", "PruebaEndpoint-InvElectronico\PruebaEndpoint-InvElectronico.csproj", "{A56DB174-DD90-48AF-A327-E324FD7CCFFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PruebaReConexionVerificador", "PruebaReConexionVerificador\PruebaReConexionVerificador.csproj", "{1C40F801-7466-4BF2-AD08-7ABD92974735}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{A56DB174-DD90-48AF-A327-E324FD7CCFFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A56DB174-DD90-48AF-A327-E324FD7CCFFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A56DB174-DD90-48AF-A327-E324FD7CCFFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C40F801-7466-4BF2-AD08-7ABD92974735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C40F801-7466-4BF2-AD08-7ABD92974735}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C40F801-7466-4BF2-AD08-7ABD92974735}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C40F801-7466-4BF2-AD08-7ABD92974735}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
