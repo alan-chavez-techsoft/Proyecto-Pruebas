@@ -16,8 +16,6 @@ namespace Raptor.Api.Services
             var triggers = await _repo.ObtenerTriggers();
             var indices = await _repo.ObtenerIndices();
 
-            var stop = "stop";
-
             var response = tablas.Select(bt => new ConsultaDto
             {
                 Table_Schema = bt.Table_Schema,
