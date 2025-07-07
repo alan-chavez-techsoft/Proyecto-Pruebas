@@ -70,7 +70,6 @@ namespace Raptor.Api.Infraestructura
         }
         public async Task<List<Trigger>> ObtenerTriggers()
         {
-            //Deberia regresar 11, regresa 884
             var triggers = await _context.Triggers
                 .Where(x => !EF.Functions.Like(x.Name, "%SYM%") && x.Is_Ms_Shipped == false).ToListAsync();
             var triggerEvents = await _context.TriggersColumn.ToListAsync();
