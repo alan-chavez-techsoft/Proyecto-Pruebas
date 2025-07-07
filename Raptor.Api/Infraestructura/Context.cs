@@ -1,16 +1,32 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Raptor.Api.Infraestructura.Modelos;
+using Raptor.Api.Infraestructura.Models;
 using Raptor.Dominio.Entidades;
 
 namespace Raptor.Api.Infraestructura
 {
     public class Context : DbContext
     {
-        public DbSet<Tabla> Tablas { get; set; }
-        public DbSet<Columnas> Columnas { get; set; }
-        public DbSet<PrimaryKey> PrimaryKeys { get; set; }
-        public DbSet<ForeignKey> ForeignKeys { get; set; }
-        public DbSet<Trigger> Triggers { get; set; }
-        public DbSet<Indices> Indices { get; set; }
+        //Tabla
+        public DbSet<TableModel> Tables { get; set; }
+        public DbSet<SchemaModel> Schemas { get; set; }
+        //Columna
+        public DbSet<ColumnModel> Columns { get; set; }
+        public DbSet<TypeModel> Types { get; set; }
+        //PrimaryKey
+        public DbSet<KeyConstraintModel> KeyConstraints { get; set; }
+        //ForeignKey
+        public DbSet<ForeignKeyModel> ForeignKeys { get; set; }
+        public DbSet<ForeignKeyColumnModel> ForeignKeysColumn { get; set; }
+        //Trigger
+        public DbSet<TriggerModel> Triggers { get; set; }
+        public DbSet<TriggerEventModel> TriggersColumn { get; set; }
+        public DbSet<SqlModuleModel> SqlModules { get; set; }
+
+        //Indice
+        public DbSet<IndexModel> Indexes { get; set; }
+        public DbSet<IndexColumnModel> IndexesColumn { get; set; }
+
         public Context(DbContextOptions<Context> options) : base(options)
         {
         }

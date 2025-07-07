@@ -2,10 +2,9 @@
 
 namespace Raptor.Dominio.Entidades
 {
-    public class Columnas(int object_Id, int ordinal_Position, string column_Name, bool is_Nullable, string data_Type,
+    public class Columna(int object_Id, int ordinal_Position, string column_Name, bool is_Nullable, string data_Type,
         short character_Maximum_Length, byte numeric_Precision, byte numeric_Scale, int default_Object_Id, bool is_Identity)
     {
-        [Key]
         public int Object_Id { get; set; } = object_Id;
         public int Ordinal_Position { get; set; } = ordinal_Position;
         public string Column_Name { get; set; } = column_Name;

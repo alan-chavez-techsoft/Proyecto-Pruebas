@@ -7,84 +7,98 @@ namespace Raptor.Api.Infraestructura
     public class ConsultasRepository(Context context) : IConsultasRepository
     {
         protected readonly Context _context = context;
-
-        public async Task<List<Columnas>> ObtenerColumnas()
-        {
-            return await _context.Columnas.FromSqlRaw(@"SELECT 
-                c.object_id,
-                c.column_id AS ORDINAL_POSITION,
-                c.name AS COLUMN_NAME,
-                c.is_nullable,
-                ty.name AS DATA_TYPE,
-                c.max_length AS CHARACTER_MAXIMUM_LENGTH,
-                c.precision AS NUMERIC_PRECISION,
-                c.scale AS NUMERIC_SCALE,
-                c.default_object_id,
-                c.is_identity
-            FROM sys.columns c
-            JOIN sys.types ty ON c.user_type_id = ty.user_type_id").ToListAsync();
-        }
-
-        public async Task<List<ForeignKey>> ObtenerForeignKeys()
-        {
-            return await _context.ForeignKeys.FromSqlRaw(@"SELECT 
-                fk.parent_object_id,
-                fkc.parent_column_id,
-                fk.name AS FK_NAME,
-                rt.name AS REFERENCED_TABLE,
-                rc.name AS REFERENCED_COLUMN,
-                pc.name AS LOCAL_COLUMN
-            FROM sys.foreign_keys fk
-            JOIN sys.foreign_key_columns fkc ON fk.object_id = fkc.constraint_object_id
-            JOIN sys.tables rt ON rt.object_id = fkc.referenced_object_id
-            JOIN sys.columns rc ON rc.object_id = fkc.referenced_object_id AND rc.column_id = fkc.referenced_column_id
-            JOIN sys.columns pc ON pc.object_id = fkc.parent_object_id AND pc.column_id = fkc.parent_column_id").ToListAsync();
-        }
-
-        public async Task<List<Indices>> ObtenerIndices()
-        {
-            return await _context.Indices.FromSqlRaw(@"SELECT 
-                ic.object_id,
-                ic.column_id,
-                ic.index_id,
-                i.name AS INDEX_NAME,
-                i.type_desc AS INDEX_TYPE
-            FROM sys.index_columns ic
-            JOIN sys.indexes i ON ic.object_id = i.object_id AND ic.index_id = i.index_id").ToListAsync();
-        }
-
-        public async Task<List<PrimaryKey>> ObtenerPrimaryKeys()
-        {
-            return await _context.PrimaryKeys.FromSqlRaw(@"SELECT 
-                ic.object_id,
-                ic.column_id
-            FROM sys.key_constraints kc
-            JOIN sys.index_columns ic ON kc.parent_object_id = ic.object_id AND kc.unique_index_id = ic.index_id
-            WHERE kc.type = 'PK'").ToListAsync();
-        }
-
         public async Task<List<Tabla>> ObtenerTablas()
         {
-            return await _context.Tablas.FromSqlRaw(@"SELECT 
-        t.object_id,
-        t.name AS TABLE_NAME,
-        s.name AS TABLE_SCHEMA
-    FROM sys.tables t
-    JOIN sys.schemas s ON s.schema_id = t.schema_id
-    WHERE t.is_ms_shipped = 0").ToListAsync();
+            var tablas = await _context.Tables.Where(x => x.Is_Ms_Shipped == false).ToListAsync();
+            var schemas = await _context.Schemas.ToListAsync();
+            return [.. tablas.Select(t =>
+                new Tabla(t.Object_Id,
+                t.Name,
+                schemas.First(x => x.Schema_Id == t.Schema_Id).Name)
+            )];
         }
+        public async Task<List<Columna>> ObtenerColumnas()
+        {
+            var columnas = await _context.Columns.ToListAsync();
+            var tipos = await _context.Types.ToListAsync();
+            return [.. columnas.Select(col => 
+            new Columna(col.Object_Id,
+            col.Column_Id, 
+            col.Name,
+            col.Is_Nullable,
+            tipos.First(x => x.User_Type_Id == col.User_Type_Id).Name,
+            col.Max_Length,
+            col.Precision,
+            col.Scale,
+            col.Default_Object_Id,
+            col.Is_Identity)
+            )];
+        }
+        public async Task<List<PrimaryKey>> ObtenerPrimaryKeys()
+        {
+            var keyConstraints = await _context.KeyConstraints
+                .Where(x => x.Type == "PK").ToListAsync();
+            var indexColumns = await _context.IndexesColumn.ToListAsync();
+            return [.. from kc in keyConstraints
+                    join ic in indexColumns on 
+                    new {Object_Id = kc.Parent_Object_Id, Index_Id = kc.Unique_Index_Id} 
+                    equals new { ic.Object_Id, ic.Index_Id}
+                    select new PrimaryKey(ic.Object_Id, ic.Column_Id)];
+        }
+        public async Task<List<ForeignKey>> ObtenerForeignKeys(List<Tabla> tablas, List<Columna> columnas)
+        {
+            var foreignKey = await _context.ForeignKeys.ToListAsync();
+            var foreignKeyColumn = await _context.ForeignKeysColumn.ToListAsync();
+            //var columnas = await _context.Columns.ToListAsync();
 
+            return [.. from fk in foreignKey
+                   join fkc in foreignKeyColumn on fk.Object_Id equals fkc.Constraint_Object_Id
+                   join rt in tablas on fkc.Referenced_Object_Id equals rt.Object_Id
+                   join rc in columnas
+                   on new { Object_Id = fkc.Referenced_Object_Id, Ordinal_Position = fkc.Referenced_Column_Id }
+                   equals new { rc.Object_Id, rc.Ordinal_Position }
+                   join pc in columnas
+                   on new { Object_Id = fkc.Parent_Object_Id, Ordinal_Position = fkc.Parent_Column_Id }
+                   equals new { pc.Object_Id, pc.Ordinal_Position }
+                   select new ForeignKey(
+                       fk.Parent_Object_Id,
+                       fkc.Parent_Column_Id,
+                       fk.Name,
+                       rt.Table_Name,
+                       rc.Column_Name,
+                       pc.Column_Name)];
+        }
         public async Task<List<Trigger>> ObtenerTriggers()
         {
-            return await _context.Triggers.FromSqlRaw(@"SELECT 
-                t.parent_id,
-                t.name AS TRIGGER_NAME,
-                te.type_desc AS TRIGGER_EVENT,
-                m.definition AS TRIGGER_DEFINITION
-            FROM sys.triggers t
-            LEFT JOIN sys.trigger_events te ON t.object_id = te.object_id
-            LEFT JOIN sys.sql_modules m ON t.object_id = m.object_id
-            WHERE t.is_ms_shipped = 0 AND t.name NOT LIKE '%SYM%'").ToListAsync();
+            //Deberia regresar 11, regresa 884
+            var triggers = await _context.Triggers
+                .Where(x => !EF.Functions.Like(x.Name, "%SYM%") && x.Is_Ms_Shipped == false).ToListAsync();
+            var triggerEvents = await _context.TriggersColumn.ToListAsync();
+            var sqlModules = await _context.SqlModules.ToListAsync();
+
+            return [.. triggers.Select(t =>
+            {
+                var te = triggerEvents.FirstOrDefault(x => x.Object_Id == t.Object_Id);
+                var sm = sqlModules.FirstOrDefault(x => x.Object_Id == t.Object_Id);
+                return new Trigger(t.Object_Id,
+                    t.Name,
+                    te?.Type_Desc ?? string.Empty,
+                    sm?.Definition ?? string.Empty);
+            })];
+        }
+        public async Task<List<Indice>> ObtenerIndices()
+        {
+            var index = await _context.Indexes.ToListAsync();
+            var indexColumns = await _context.IndexesColumn.ToListAsync();
+            return [.. indexColumns.Select(ic =>
+            {
+            var idx = index.First(x => x.Index_Id == ic.Index_Id && x.Object_Id == ic.Object_Id);
+            return new Indice(ic.Object_Id,
+                ic.Column_Id,
+                ic.Index_Id,
+                idx.Name,
+                idx.Type_Desc);
+            })];
         }
     }
 }
