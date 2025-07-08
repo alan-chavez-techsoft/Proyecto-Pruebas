@@ -10,11 +10,11 @@ namespace Raptor.Api.Services
         public async Task<List<ConsultaDto>> ConsultaBD()
         {
             var tablas = await _repo.ObtenerTablas();
-            var columnas = await _repo.ObtenerColumnas();
-            var primaryKeys = await _repo.ObtenerPrimaryKeys();
+            var columnas = await _repo.ObtenerColumnas(tablas);
+            var primaryKeys = await _repo.ObtenerPrimaryKeys(tablas);
             var foreignKeys = await _repo.ObtenerForeignKeys(tablas, columnas);
             var triggers = await _repo.ObtenerTriggers();
-            var indices = await _repo.ObtenerIndices();
+            var indices = await _repo.ObtenerIndices(tablas);
 
             var response = tablas.Select(bt => new ConsultaDto
             {

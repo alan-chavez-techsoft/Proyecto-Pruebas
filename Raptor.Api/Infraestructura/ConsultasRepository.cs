@@ -14,27 +14,34 @@ namespace Raptor.Api.Infraestructura
             return [.. tablas.Select(t =>
                 new Tabla(t.Object_Id,
                 t.Name,
-                schemas.First(x => x.Schema_Id == t.Schema_Id).Name)
+                schemas.First(x => x.Schema_Id == t.Schema_Id).Name,
+                t.Is_Ms_Shipped)
             )];
         }
-        public async Task<List<Columna>> ObtenerColumnas()
+        public async Task<List<Columna>> ObtenerColumnas(List<Tabla> tablas)
         {
             var columnas = await _context.Columns.ToListAsync();
             var tipos = await _context.Types.ToListAsync();
-            return [.. columnas.Select(col => 
-            new Columna(col.Object_Id,
-            col.Column_Id, 
-            col.Name,
-            col.Is_Nullable,
-            tipos.First(x => x.User_Type_Id == col.User_Type_Id).Name,
-            col.Max_Length,
-            col.Precision,
-            col.Scale,
-            col.Default_Object_Id,
-            col.Is_Identity)
-            )];
+
+            return [.. from c in columnas
+                    join ty in tipos on c.User_Type_Id equals ty.User_Type_Id
+                    join tb in tablas on c.Object_Id equals tb.Object_Id into tablaJoin
+                    from tb in tablaJoin.DefaultIfEmpty()
+                    where tb != null && !tb.Is_Ms_Shipped
+                    select new Columna(
+                        c.Object_Id,
+                        c.Column_Id,
+                        c.Name,
+                        c.Is_Nullable,
+                        ty.Name,
+                        c.Max_Length,
+                        c.Precision,
+                        c.Scale,
+                        c.Default_Object_Id,
+                        c.Is_Identity
+                        )];
         }
-        public async Task<List<PrimaryKey>> ObtenerPrimaryKeys()
+        public async Task<List<PrimaryKey>> ObtenerPrimaryKeys(List<Tabla> tablas)
         {
             var keyConstraints = await _context.KeyConstraints
                 .Where(x => x.Type == "PK").ToListAsync();
@@ -43,13 +50,15 @@ namespace Raptor.Api.Infraestructura
                     join ic in indexColumns on 
                     new {Object_Id = kc.Parent_Object_Id, Index_Id = kc.Unique_Index_Id} 
                     equals new { ic.Object_Id, ic.Index_Id}
+                    join tb in tablas on ic.Object_Id equals tb.Object_Id into tablaJoin
+                    from tb in tablaJoin.DefaultIfEmpty()
+                    where tb != null && !tb.Is_Ms_Shipped
                     select new PrimaryKey(ic.Object_Id, ic.Column_Id)];
         }
         public async Task<List<ForeignKey>> ObtenerForeignKeys(List<Tabla> tablas, List<Columna> columnas)
         {
             var foreignKey = await _context.ForeignKeys.ToListAsync();
             var foreignKeyColumn = await _context.ForeignKeysColumn.ToListAsync();
-            //var columnas = await _context.Columns.ToListAsync();
 
             return [.. from fk in foreignKey
                    join fkc in foreignKeyColumn on fk.Object_Id equals fkc.Constraint_Object_Id
@@ -60,6 +69,7 @@ namespace Raptor.Api.Infraestructura
                    join pc in columnas
                    on new { Object_Id = fkc.Parent_Object_Id, Ordinal_Position = fkc.Parent_Column_Id }
                    equals new { pc.Object_Id, pc.Ordinal_Position }
+                   where rt.Is_Ms_Shipped == false
                    select new ForeignKey(
                        fk.Parent_Object_Id,
                        fkc.Parent_Column_Id,
@@ -85,19 +95,21 @@ namespace Raptor.Api.Infraestructura
                     sm?.Definition ?? string.Empty);
             })];
         }
-        public async Task<List<Indice>> ObtenerIndices()
+        public async Task<List<Indice>> ObtenerIndices(List<Tabla> tablas)
         {
             var index = await _context.Indexes.ToListAsync();
             var indexColumns = await _context.IndexesColumn.ToListAsync();
-            return [.. indexColumns.Select(ic =>
-            {
-            var idx = index.First(x => x.Index_Id == ic.Index_Id && x.Object_Id == ic.Object_Id);
-            return new Indice(ic.Object_Id,
-                ic.Column_Id,
-                ic.Index_Id,
-                idx.Name,
-                idx.Type_Desc);
-            })];
+            return [..from ic in indexColumns
+                   join i in index on new { ic.Object_Id ,ic.Index_Id } equals new { i.Object_Id ,i.Index_Id }
+                   join tb in tablas on ic.Object_Id equals tb.Object_Id into tablaJoin
+                   from tb in tablaJoin.DefaultIfEmpty()
+                   where tb != null && !tb.Is_Ms_Shipped
+                   select new Indice(
+                       ic.Object_Id,
+                       ic.Column_Id,
+                       ic.Index_Id,
+                       i.Name,
+                       i.Type_Desc)];
         }
     }
 }
