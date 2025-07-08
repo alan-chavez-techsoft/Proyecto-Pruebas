@@ -99,17 +99,22 @@ namespace Raptor.Api.Infraestructura
         {
             var index = await _context.Indexes.ToListAsync();
             var indexColumns = await _context.IndexesColumn.ToListAsync();
-            return [..from ic in indexColumns
-                   join i in index on new { ic.Object_Id ,ic.Index_Id } equals new { i.Object_Id ,i.Index_Id }
-                   join tb in tablas on ic.Object_Id equals tb.Object_Id into tablaJoin
-                   from tb in tablaJoin.DefaultIfEmpty()
-                   where tb != null && !tb.Is_Ms_Shipped
-                   select new Indice(
-                       ic.Object_Id,
-                       ic.Column_Id,
-                       ic.Index_Id,
-                       i.Name,
-                       i.Type_Desc)];
+
+            var query = from ic in indexColumns
+                        join i in index on new { ic.Object_Id, ic.Index_Id } equals new { i.Object_Id, i.Index_Id }
+                        join tb in tablas on ic.Object_Id equals tb.Object_Id into tablaJoin
+                        from tb in tablaJoin.DefaultIfEmpty()
+                        where tb != null && !tb.Is_Ms_Shipped
+                        group ic by new { ic.Object_Id, ic.Index_Id, i.Name, i.Type_Desc } into g
+                        select new Indice(
+                            g.Key.Object_Id,
+                            g.First().Column_Id, // Puedes cambiar esto por una lista si lo necesitas
+                            g.Key.Index_Id,
+                            g.Key.Name,
+                            g.Key.Type_Desc
+                        );
+
+            return query.ToList();
         }
     }
 }
