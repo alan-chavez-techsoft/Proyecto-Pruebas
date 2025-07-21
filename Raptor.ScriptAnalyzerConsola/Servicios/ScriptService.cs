@@ -23,27 +23,6 @@ public class ScriptService
 
                 var sqlContent = await FileHelper.ReadFileAsync($"{rutaArchivos}\\{archivo.Nombre}");
                 var analisis = analyzer.Analyze(sqlContent);
-                var tables = analisis.Changes
-                    .Where(x => x.ObjectType == ObjectType.Table)
-                    .ToList();
-                var procedures = analisis.Changes
-                    .Where(x => x.ObjectType == ObjectType.Procedure)
-                    .ToList();
-                var functions = analisis.Changes
-                    .Where(x => x.ObjectType == ObjectType.Function)
-                    .ToList();
-                var views = analisis.Changes
-                    .Where(x => x.ObjectType == ObjectType.View)
-                    .ToList();
-                var triggers = analisis.Changes
-                    .Where(x => x.ObjectType == ObjectType.Trigger)
-                    .ToList();
-                var indexes = analisis.Changes
-                    .Where(x => x.ObjectType == ObjectType.Index)
-                    .ToList();
-                var schemas = analisis.Changes
-                    .Where(x => x.ObjectType == ObjectType.Schema)
-                    .ToList();
 
                 var cambios = new Dictionary<ChangeType, string>
                 {
@@ -86,27 +65,44 @@ public class ScriptService
                                 Descripcion = $"Restricción eliminada: {cons}"
                             }))
                         )
-                        .Concat(procedures.Select(t => new ObjetosAnalizados
+                        .Concat(analisis.Changes
+                        .Where(x => x.ObjectType == ObjectType.Procedure)
+                        .Select(t => new ObjetosAnalizados
                         {
                             Nombre = t.ObjectName,
                             Descripcion = $"Se {cambios[t.ChangeType]}: {t.ObjectName}"
                         }))
-                        .Concat(functions.Select(t => new ObjetosAnalizados
+                        .Concat(analisis.Changes
+                        .Where(x => x.ObjectType == ObjectType.Function)
+                        .Select(t => new ObjetosAnalizados
                         {
                             Nombre = t.ObjectName,
                             Descripcion = $"Se {cambios[t.ChangeType]}: {t.ObjectName}"
                         }))
-                        .Concat(tables.Select(t => new ObjetosAnalizados
+                        .Concat(analisis.Changes
+                        .Where(x => x.ObjectType == ObjectType.View)
+                        .Select(t => new ObjetosAnalizados
                         {
                             Nombre = t.ObjectName,
                             Descripcion = $"Se {cambios[t.ChangeType]}: {t.ObjectName}"
                         }))
-                        .Concat(views.Select(t => new ObjetosAnalizados
+                        .Concat(analisis.Changes
+                        .Where(x => x.ObjectType == ObjectType.Trigger)
+                        .Select(t => new ObjetosAnalizados
                         {
                             Nombre = t.ObjectName,
                             Descripcion = $"Se {cambios[t.ChangeType]}: {t.ObjectName}"
                         }))
-                        .Concat(triggers.Select(t => new ObjetosAnalizados
+                        .Concat(analisis.Changes
+                        .Where(x => x.ObjectType == ObjectType.Index)
+                        .Select(t => new ObjetosAnalizados
+                        {
+                            Nombre = t.ObjectName,
+                            Descripcion = $"Se {cambios[t.ChangeType]}: {t.ObjectName}"
+                        }))
+                        .Concat(analisis.Changes
+                        .Where(x => x.ObjectType == ObjectType.Schema)
+                        .Select(t => new ObjetosAnalizados
                         {
                             Nombre = t.ObjectName,
                             Descripcion = $"Se {cambios[t.ChangeType]}: {t.ObjectName}"
