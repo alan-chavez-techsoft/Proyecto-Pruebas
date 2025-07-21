@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raptor.Dominio", "Raptor.Do
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raptor.Api", "Raptor.Api\Raptor.Api.csproj", "{129B6608-4F1C-4A4C-9C20-10BC32880973}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raptor.ScriptAnalyzerConsola", "Raptor.ScriptAnalyzerConsola\Raptor.ScriptAnalyzerConsola.csproj", "{BECDA953-85D2-4A9F-B259-26396B718AA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{129B6608-4F1C-4A4C-9C20-10BC32880973}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{129B6608-4F1C-4A4C-9C20-10BC32880973}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{129B6608-4F1C-4A4C-9C20-10BC32880973}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BECDA953-85D2-4A9F-B259-26396B718AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BECDA953-85D2-4A9F-B259-26396B718AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BECDA953-85D2-4A9F-B259-26396B718AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BECDA953-85D2-4A9F-B259-26396B718AA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +111,7 @@ Global
 		{65CD5E3F-FC5C-4A31-BA8A-E0E91CF792AF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{BDD81A52-E6A3-4921-9714-D8C48DAA580F} = {E573A1A9-0DBC-4C6C-ACFA-88D1F7261FF5}
 		{129B6608-4F1C-4A4C-9C20-10BC32880973} = {E573A1A9-0DBC-4C6C-ACFA-88D1F7261FF5}
+		{BECDA953-85D2-4A9F-B259-26396B718AA6} = {E573A1A9-0DBC-4C6C-ACFA-88D1F7261FF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D6CBF478-315B-4854-BFBE-867A59796B02}

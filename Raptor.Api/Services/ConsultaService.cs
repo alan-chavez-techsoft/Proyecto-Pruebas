@@ -64,7 +64,7 @@ namespace Raptor.Api.Services
 
             return response;
         }
-        public static int CalculateChecksum(string input)
+        private static int CalculateChecksum(string input)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(input);
             int sum = 0;
