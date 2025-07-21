@@ -7,7 +7,8 @@ using Raptor.ScriptAnalyzerConsola.Utilities;
 var rutaArchivos = @"C:\\PSGT";
 var lista = new List<NombreArchivo>
 {
-    new() { Nombre = "01-PharmacySoftBO_TablasNuevas", Orden = 1 },
+    //new() { Nombre = "aaaaa", Orden = 1 },
+    //new() { Nombre = "01-PharmacySoftBO_TablasNuevas", Orden = 1 },
     //new() { Nombre = "02-PharmacySoftBO_CamposNuevos", Orden = 2 },
     //new() { Nombre = "03-PharmacySoftBO_ModificaCampos", Orden = 3 },
     //new() { Nombre = "04-PharmacySoftBO_Triggers", Orden = 4 },
@@ -29,7 +30,7 @@ var lista = new List<NombreArchivo>
     //new() { Nombre = "20-PharmacySoftAL_Triggers", Orden = 20 },
     //new() { Nombre = "21-PharmacySoftAL_250612_Actualizar", Orden = 21 },
     //new() { Nombre = "22-PharmacySoftAL_CargaInicial", Orden = 22 },
-    //new() { Nombre = "20250717-Script de comparación de esquema de PharmacySoftBackOffice", Orden = 2 },
+    new() { Nombre = "20250717-Script de comparación de esquema de PharmacySoftBackOffice", Orden = 2 },
 };
 
 try
@@ -38,7 +39,7 @@ try
     var response = await service.AnalizarScript(rutaArchivos, lista);
 
 
-    var analizer = new SqlScriptAnalyzer();
+    var analizer = new SqlScriptAnalyzer2();
     analizer.Analyze2($"{rutaArchivos}\\01-PharmacySoftBO_TablasNuevas.sql");
     //analizer.Analyze2($"{rutaArchivos}\\20250717-Script de comparación de esquema de PharmacySoftBackOffice.sql");
 }

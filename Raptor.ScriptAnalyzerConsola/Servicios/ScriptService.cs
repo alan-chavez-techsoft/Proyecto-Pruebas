@@ -1,5 +1,6 @@
 ﻿using Raptor.ScriptAnalyzerConsola.Dtos;
 using Raptor.ScriptAnalyzerConsola.Utilities;
+using static Raptor.ScriptAnalyzerConsola.Enumeradores;
 
 namespace Raptor.ScriptAnalyzerConsola.Servicios;
 
@@ -22,51 +23,94 @@ public class ScriptService
 
                 var sqlContent = await FileHelper.ReadFileAsync($"{rutaArchivos}\\{archivo.Nombre}");
                 var analisis = analyzer.Analyze(sqlContent);
+                var tables = analisis.Changes
+                    .Where(x => x.ObjectType == ObjectType.Table)
+                    .ToList();
+                var procedures = analisis.Changes
+                    .Where(x => x.ObjectType == ObjectType.Procedure)
+                    .ToList();
+                var functions = analisis.Changes
+                    .Where(x => x.ObjectType == ObjectType.Function)
+                    .ToList();
+                var views = analisis.Changes
+                    .Where(x => x.ObjectType == ObjectType.View)
+                    .ToList();
+                var triggers = analisis.Changes
+                    .Where(x => x.ObjectType == ObjectType.Trigger)
+                    .ToList();
+                var indexes = analisis.Changes
+                    .Where(x => x.ObjectType == ObjectType.Index)
+                    .ToList();
+                var schemas = analisis.Changes
+                    .Where(x => x.ObjectType == ObjectType.Schema)
+                    .ToList();
 
-                var stop = "stop";
+                var cambios = new Dictionary<ChangeType, string>
+                {
+                    { ChangeType.Create, "creo" },
+                    { ChangeType.Alter, "modifico" },
+                    { ChangeType.Drop, "elimino" },
+                    { ChangeType.Rename, "reenombro" }
+                };
+
 
                 response.Scripts.Add(new InformacionScript
                 {
                     Nombre = archivo.Nombre,
                     Orden = archivo.Orden,
                     Objetos = [..
-                            analisis.Changes.SelectMany(x =>
-                                x.ColumnsAdded.Select(col => new ObjetosAnalizados
-                                {
-                                    Nombre = x.ObjectName,
-                                    Descripcion = $"Columna agregada: {col}"
-                                })
-                                .Concat(x.ColumnsDropped.Select(col => new ObjetosAnalizados
-                                {
-                                    Nombre = x.ObjectName,
-                                    Descripcion = $"Columna eliminada: {col}"
-                                }))
-                                .Concat(x.ColumnsModified.Select(col => new ObjetosAnalizados
-                                {
-                                    Nombre = x.ObjectName,
-                                    Descripcion = $"Columna modificada: {col}"
-                                }))
-                                .Concat(x.ConstraintsAdded.Select(cons => new ObjetosAnalizados
-                                {
-                                    Nombre = x.ObjectName,
-                                    Descripcion = $"Restricción agregada: {cons}"
-                                }))
-                                .Concat(x.ConstraintsDropped.Select(cons => new ObjetosAnalizados
-                                {
-                                    Nombre = x.ObjectName,
-                                    Descripcion = $"Restricción eliminada: {cons}"
-                                }))
-                                .Concat(x.OtherChanges.Select(other => new ObjetosAnalizados
-                                {
-                                    Nombre = x.ObjectName,
-                                    Descripcion = $"Otro cambio: {other}"
-                                }))
-                                .DefaultIfEmpty(new ObjetosAnalizados
-                                {
-                                    Nombre = x.ObjectName,
-                                    Descripcion = $"Tipo de cambio: {x.ChangeType}, Tipo de objeto: {x.ObjectType}"
-                                })
-                            )
+                        analisis.Changes.SelectMany(x =>
+                            x.ColumnsAdded.Select(col => new ObjetosAnalizados
+                            {
+                                Nombre = x.ObjectName,
+                                Descripcion = $"Columna agregada: {col}"
+                            })
+                            .Concat(x.ColumnsDropped.Select(col => new ObjetosAnalizados
+                            {
+                                Nombre = x.ObjectName,
+                                Descripcion = $"Columna eliminada: {col}"
+                            }))
+                            .Concat(x.ColumnsModified.Select(col => new ObjetosAnalizados
+                            {
+                                Nombre = x.ObjectName,
+                                Descripcion = $"Columna modificada: {col}"
+                            }))
+                            .Concat(x.ConstraintsAdded.Select(cons => new ObjetosAnalizados
+                            {
+                                Nombre = x.ObjectName,
+                                Descripcion = $"Restricción agregada: {cons}"
+                            }))
+                            .Concat(x.ConstraintsDropped.Select(cons => new ObjetosAnalizados
+                            {
+                                Nombre = x.ObjectName,
+                                Descripcion = $"Restricción eliminada: {cons}"
+                            }))
+                        )
+                        .Concat(procedures.Select(t => new ObjetosAnalizados
+                        {
+                            Nombre = t.ObjectName,
+                            Descripcion = $"Se {cambios[t.ChangeType]}: {t.ObjectName}"
+                        }))
+                        .Concat(functions.Select(t => new ObjetosAnalizados
+                        {
+                            Nombre = t.ObjectName,
+                            Descripcion = $"Se {cambios[t.ChangeType]}: {t.ObjectName}"
+                        }))
+                        .Concat(tables.Select(t => new ObjetosAnalizados
+                        {
+                            Nombre = t.ObjectName,
+                            Descripcion = $"Se {cambios[t.ChangeType]}: {t.ObjectName}"
+                        }))
+                        .Concat(views.Select(t => new ObjetosAnalizados
+                        {
+                            Nombre = t.ObjectName,
+                            Descripcion = $"Se {cambios[t.ChangeType]}: {t.ObjectName}"
+                        }))
+                        .Concat(triggers.Select(t => new ObjetosAnalizados
+                        {
+                            Nombre = t.ObjectName,
+                            Descripcion = $"Se {cambios[t.ChangeType]}: {t.ObjectName}"
+                        }))
                     ]
                 });
             }
