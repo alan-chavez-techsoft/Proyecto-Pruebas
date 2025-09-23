@@ -36,7 +36,7 @@ namespace EncriptadorColector
         public string GrupoLedgers { get; set; } = string.Empty;
         public string Usuario { get; set; } = string.Empty;
         public required List<DetallePolizaDto> DetallesPoliza { get; set; } = [];
-        public List<ProveedorUnicaVezDto> ProveedoresUnicaVez { get; set; } = [];
+        //public List<ProveedorUnicaVezDto> ProveedoresUnicaVez { get; set; } = [];
         public List<DetalleRetencionDto> DetallesRetencion { get; set; } = [];
     }
 
@@ -124,8 +124,6 @@ namespace EncriptadorColector
         public string BanderaRetencionesAcreedor { get; set; } = string.Empty;
         [StringLength(18)] //Este length es antes de encriptar
         public string NumeroCuentaBancaria { get; set; } = string.Empty; //Encriptado
-        [StringLength(18)] //Este length es antes de encriptar
-        public string CuentaDivergente { get; set; } = string.Empty; //Encriptado
         [StringLength(10)]
         public string DocumentoPresupuestal { get; set; } = string.Empty;
         [StringLength(10)]
