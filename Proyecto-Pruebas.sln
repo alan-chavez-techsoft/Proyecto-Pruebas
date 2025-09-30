@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raptor.ScriptAnalyzerConsol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncriptadorColector", "EncriptadorColector\EncriptadorColector.csproj", "{7D58AB37-8B08-46F1-A7AD-BF4154DEDEEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PruebasStrings", "PruebasStrings\PruebasStrings.csproj", "{34D409D5-075C-48B6-BCE8-E2711242E9F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,10 @@ Global
 		{7D58AB37-8B08-46F1-A7AD-BF4154DEDEEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D58AB37-8B08-46F1-A7AD-BF4154DEDEEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D58AB37-8B08-46F1-A7AD-BF4154DEDEEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34D409D5-075C-48B6-BCE8-E2711242E9F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34D409D5-075C-48B6-BCE8-E2711242E9F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34D409D5-075C-48B6-BCE8-E2711242E9F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34D409D5-075C-48B6-BCE8-E2711242E9F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
